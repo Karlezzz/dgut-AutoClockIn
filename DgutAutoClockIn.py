@@ -9,26 +9,35 @@ from selenium.webdriver.common.by import By
 
 result = "还未打卡"
 try:
+
     option = webdriver.ChromeOptions()
     browser = webdriver.Chrome(options=option)
     browser.implicitly_wait(10)
     browser.get("https://yqfk-daka.dgut.edu.cn/")
-    time.sleep(20)
+    browser.implicitly_wait(10)
+    time.sleep(10)
 
-    browser.find_element(By.ID, "username").send_keys("--此处输入学号--") #输入学号
-    browser.find_element(By.ID, "password").send_keys("--此处输入密码--\n") #输入密码并登录
-    time.sleep(20)
+    browser.find_element(By.ID, "username").send_keys("--此处输入学号--")  # 输入学号
+    browser.find_element(By.ID, "password").send_keys("--此处输入密码--\n")  # 输入密码并登录
+    time.sleep(10)
 
-    browser.execute_script("document.querySelectorAll('.van-cell__title')[7].click()") #点击选择身体状况选项
+    browser.execute_script("document.querySelectorAll('.van-cell__title')[7].click()")  #点击选择身体状况选项
     time.sleep(1)
-    browser.execute_script("document.querySelectorAll('.van-picker-column__item')[0].click()") #选择身体状况良好
+    browser.execute_script("document.querySelectorAll('.van-picker-column__item')[0].click()")  #选择身体状况良好
     time.sleep(1)
     browser.execute_script("document.querySelector('.van-picker__confirm').click()")    #提交身体状况
     time.sleep(1)
 
-    browser.execute_script("document.querySelectorAll('.van-cell')[9].querySelector('textarea').value='36.5'")  #输入体温
+    browser.execute_script("document.querySelectorAll('.van-cell__title')[10].click()")  # 点击选择是否在校
     time.sleep(1)
-    browser.execute_script("document.querySelector('.van-picker__confirm').click()")    #提交体温
+    browser.execute_script("document.querySelectorAll('.van-picker-column__item')[0].click()")  # 选择在ssl校区
+    time.sleep(1)
+    browser.execute_script("document.querySelectorAll('.van-picker__confirm')[1].click()")  # 提交在校情况
+    time.sleep(1)
+
+    browser.find_element(By.TAG_NAME, 'textarea').send_keys("36.5")  # 输入体温
+    time.sleep(1)
+    browser.execute_script("document.querySelector('.van-picker__confirm').click()")  # 提交体温
     time.sleep(1)
 
     #判断打卡结果
@@ -39,7 +48,7 @@ try:
               "let content = document.querySelector('button').querySelector('span').innerHTML;" \
               "if(content === '提交'){document.querySelector('button').click();a.appendChild(c);}" \
               "else if(content === '撤回重填') a.appendChild(b);" \
-              "let timer = setInterval(function () {let content1 = document.querySelector('button').querySelector('span').innerHTML;if (content1 === '提交') a.appendChild(d);else if (content1 === '撤回重填') a.appendChild(b);document.body.appendChild(a);clearInterval(timer);}, 15000);"
+              "let timer = setInterval(function () {let content1 = document.querySelector('button').querySelector('span').innerHTML;if (content1 === '提交') a.appendChild(d);else if (content1 === '撤回重填') a.appendChild(b);document.body.appendChild(a);clearInterval(timer);}, 20000);"
     browser.execute_script(js_code)
     time.sleep(5)
     if browser.find_element(By.XPATH, "//p").text == "已经打过卡了":
