@@ -37,7 +37,19 @@ try:
     time.sleep(1)
 
     browser.execute_script("document.querySelectorAll('.van-cell__title')[36].click()")  # 选择最后一次核酸日期
-    time.sleep(1)
+    time.sleep(5)
+    # 7天一周期，七天内都选周期第一天,月份和年份都为最新时间
+    # 选择日期
+    js_date = """
+    let nowDate = new Date().getDate()
+    const dateList = [1, 8, 15, 22, 29]
+    let selDate = null
+    if (nowDate % 7 != 0) selDate = dateList[parseInt(nowDate / 7)]
+    else selDate = dateList[parseInt(nowDate / 7 - 1)]
+    document.querySelectorAll('.van-picker-column')[4].querySelectorAll('.van-picker-column__item')[selDate - 1].click()
+    """
+    browser.execute_script(js_date)
+    time.sleep(5)
     browser.execute_script("document.querySelectorAll('.van-picker__confirm')[2].click()")  # 提交核酸日期
     time.sleep(1)
 
