@@ -34,9 +34,16 @@ try:
     browser.execute_script("document.querySelectorAll('.van-cell__title')[10].click()")  # 点击选择是否在校
     time.sleep(1)
     browser.execute_script("document.querySelectorAll('.van-picker__confirm')[1].click()")  # 提交在校情况
+    time.sleep(2)
+
+    browser.execute_script("document.querySelectorAll('.van-field__label')[2].click()") #点击校内具体住址
+    time.sleep(1)
+    browser.execute_script("document.querySelectorAll('.van-cascader__option')[0].click()") #选择学生公寓
+    time.sleep(1)
+    browser.execute_script("document.querySelectorAll('.van-cascader__option')[6].click()")  # 选择莞华
     time.sleep(1)
 
-    browser.execute_script("document.querySelectorAll('.van-cell__title')[36].click()")  # 选择最后一次核酸日期
+    browser.execute_script("document.querySelectorAll('.van-field__label')[14].click()")  # 选择最后一次核酸日期
     time.sleep(5)
     # 7天一周期，七天内都选周期第一天,月份和年份都为最新时间
     # 选择日期
