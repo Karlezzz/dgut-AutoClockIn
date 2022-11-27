@@ -10,16 +10,22 @@ from selenium.webdriver.common.by import By
 result = "还未打卡"
 try:
 
-    option = webdriver.ChromeOptions()
-    browser = webdriver.Chrome(options=option)
+    mobileEmulation = {'deviceName': 'Galaxy S5'} #定义移动设备
+
+    option = webdriver.EdgeOptions()
+    option.add_experimental_option('mobileEmulation',mobileEmulation) #浏览器模拟移动设备
+    browser = webdriver.Edge(options=option)
     browser.implicitly_wait(10)
     browser.get("https://yqfk-daka.dgut.edu.cn/")
     browser.implicitly_wait(10)
     time.sleep(10)
 
-    browser.find_element(By.ID, "username").send_keys("--此处输入学号--")  # 输入学号
-    browser.find_element(By.ID, "password").send_keys("--此处输入密码--\n")  # 输入密码并登录
+    browser.find_element(By.ID, "username").send_keys("***")  # 输入学号
+    browser.find_element(By.ID, "password").send_keys("***\n")  # 输入密码并登录
     time.sleep(10)
+
+    browser.refresh()  # 刷新页面获取ip
+    time.sleep(5)
 
     browser.execute_script("document.querySelectorAll('.van-cell__title')[7].click()")  # 点击选择身体状况选项
     time.sleep(1)
@@ -43,7 +49,7 @@ try:
     browser.execute_script("document.querySelectorAll('.van-cascader__option')[6].click()")  # 选择莞华
     time.sleep(1)
 
-    browser.execute_script("document.querySelectorAll('.van-field__label')[14].click()")  # 选择最后一次核酸日期
+    browser.execute_script("document.querySelectorAll('.van-field__label')[13].click()")  # 选择最后一次核酸日期
     time.sleep(5)
     # 7天一周期，七天内都选周期第一天,月份和年份都为最新时间
     # 选择日期
@@ -61,15 +67,15 @@ try:
     time.sleep(1)
 
     # 提交打卡并且判断打卡结果
-    js_code = "let a = document.createElement('p');" \
+    js_confirm = "let a = document.createElement('p');" \
               "let b = document.createTextNode('已经打过卡了');" \
               "let c = document.createTextNode('打卡成功');" \
               "let d = document.createTextNode('打卡失败');" \
-              "let content = document.querySelector('button').querySelector('span').innerHTML;" \
-              "if(content === '提交'){document.querySelector('button').click();a.appendChild(c);}" \
+              "let content = document.querySelectorAll('button')[3].querySelector('span').innerHTML;" \
+              "if(content === '提交'){document.querySelectorAll('button')[3].click();a.appendChild(c);}" \
               "else if(content === '撤回重填') a.appendChild(b);" \
-              "let timer = setInterval(function () {let content1 = document.querySelector('button').querySelector('span').innerHTML;if (content1 === '提交') a.appendChild(d);else if (content1 === '撤回重填') a.appendChild(b);document.body.appendChild(a);clearInterval(timer);}, 20000);"
-    browser.execute_script(js_code)
+              "let timer = setInterval(function () {let content1 = document.querySelectorAll('button')[3].querySelector('span').innerHTML;if (content1 === '提交') a.appendChild(d);else if (content1 === '撤回重填') a.appendChild(b);document.body.appendChild(a);clearInterval(timer);}, 20000);"
+    browser.execute_script(js_confirm)
     time.sleep(30)
 
     print(browser.find_element(By.XPATH, "//p").text)
