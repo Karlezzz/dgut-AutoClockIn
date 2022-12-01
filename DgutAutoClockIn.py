@@ -67,14 +67,29 @@ try:
     time.sleep(1)
 
     # 提交打卡并且判断打卡结果
-    js_confirm = "let a = document.createElement('p');" \
-              "let b = document.createTextNode('已经打过卡了');" \
-              "let c = document.createTextNode('打卡成功');" \
-              "let d = document.createTextNode('打卡失败');" \
-              "let content = document.querySelectorAll('button')[3].querySelector('span').innerHTML;" \
-              "if(content === '提交'){document.querySelectorAll('button')[3].click();a.appendChild(c);}" \
-              "else if(content === '撤回重填') a.appendChild(b);" \
-              "let timer = setInterval(function () {let content1 = document.querySelectorAll('button')[3].querySelector('span').innerHTML;if (content1 === '提交') a.appendChild(d);else if (content1 === '撤回重填') a.appendChild(b);document.body.appendChild(a);clearInterval(timer);}, 20000);"
+    js_confirm = """
+    let title1 = document.querySelector('.van-grid-item__icon-wrapper').querySelector('div').innerText
+        let button = document.querySelectorAll('button')[1]
+        let a = document.createElement('p');
+        let b = document.createTextNode('已经打卡');
+        let c = document.createTextNode('打卡成功');
+        let d = document.createTextNode('打卡异常');
+        if(title1.indexOf('未打卡')!=-1||title1.indexOf('撤回今天的打卡')!=-1){
+            button.click()
+            a.appendChild(c)
+        }
+        setTimeout(()=>{
+            let title2 = document.querySelector('.van-grid-item__icon-wrapper').querySelector('div').innerText
+            if(title2.indexOf('未打卡')!=-1||title2.indexOf('撤回今天的打卡')!=-1){
+                button.click()
+                a.appendChild(d)
+            }else if(title2.indexOf('已打卡成功')!=-1){
+                a.appendChild(b)
+            }
+            document.body.appendChild(a)
+        },15000)
+        """
+    
     browser.execute_script(js_confirm)
     time.sleep(30)
 
